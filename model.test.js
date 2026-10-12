@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {calculate,defaultProfile,recipes,dayMeals,shopping,mealTags,candidates} from './model.js';
-import {recipeIllustration} from './art.js';
+import {photoMarkup} from './photos.js';
 
 test('Mifflin calculation uses sex and activity',()=>{
  const p={...defaultProfile,weight:70,height:175,age:30,activity:1.2};
@@ -22,9 +22,9 @@ test('all seven days have different dishes in every meal slot, including vegetar
   assert.equal(new Set(ids).size,7,`${diet}: ${mealTags[slot]} must vary`);
  }
 });
-test('all recipes contain ingredients, nutrition, useful steps and embedded illustrations',()=>{
+test('all recipes contain ingredients, nutrition, useful steps and photograph viewports',()=>{
  const names=new Set();
- for(const r of recipes){assert.ok(!names.has(r.name));names.add(r.name);assert.ok(r.ingredients.length>=3);assert.ok(r.steps.length>=2);assert.ok(r.kcal>0&&r.protein>=0&&r.fat>=0&&r.carbs>=0);assert.match(recipeIllustration(r),/^data:image\/svg\+xml/)}
+ for(const r of recipes){assert.ok(!names.has(r.name));names.add(r.name);assert.ok(r.ingredients.length>=3);assert.ok(r.steps.length>=2);assert.ok(r.kcal>0&&r.protein>=0&&r.fat>=0&&r.carbs>=0);assert.match(photoMarkup(r),/data-photo-id=/)}
 });
 test('vegetarian plans exclude meat and fish in all meal slots',()=>{
  const forbidden=/Куриное|индейки|Говядина|Лосось|Треска|Тунец|Креветки/;
