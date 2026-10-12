@@ -28,7 +28,7 @@ export function createSceneManager(){
   const mesh=(type,p,r,scale,color,metal=.15,parent=root)=>{const m=multiply(parent,transform(p,r,scale));const b=buffers[type];gl.bindBuffer(gl.ARRAY_BUFFER,b.pos);gl.vertexAttribPointer(loc.position,3,gl.FLOAT,false,0,0);gl.bindBuffer(gl.ARRAY_BUFFER,b.norm);gl.vertexAttribPointer(loc.normal,3,gl.FLOAT,false,0,0);gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER,b.idx);gl.uniformMatrix4fv(loc.model,false,m);gl.uniform3fv(loc.color,color);gl.uniform1f(loc.metal,metal);gl.drawElements(gl.TRIANGLES,b.count,gl.UNSIGNED_SHORT,0)};
   const orb=(p,scale,color,metal=.2)=>mesh('sphere',p,[0,t*.1,0],[scale,scale,scale],color,metal);
   function dumbbell(p,size,angle){const group=multiply(root,transform(p,[.15,Math.sin(t*.35)*.3,angle],[size,size,size]));mesh('cylinder',[0,0,0],[0,0,Math.PI/2],[.11,1.1,.11],silver,.8,group);for(const x of [-.95,.95]){mesh('cylinder',[x,0,0],[0,0,Math.PI/2],[.57,.18,.57],black,.6,group);mesh('cylinder',[x*1.17,0,0],[0,0,Math.PI/2],[.44,.1,.44],red,.6,group);mesh('cylinder',[x*1.3,0,0],[0,0,Math.PI/2],[.14,.08,.14],silver,.8,group)}}
-  if(s.kind==='training'){dumbbell([0,0,0],1.3,-.4);mesh('torus',[.6,.05,-1],[.6,.45,t*.1],[1.5,1.5,.6],red,.5);orb([-1.7,1.1,.2],.24,silver,.8);orb([1.65,-1.1,0],.18,red)}
+  if(s.kind==='training'){dumbbell([0,0,0],1.55,-.35)}
   else if(s.kind==='food'||s.kind==='basket'){
    const group=multiply(root,transform([0,-.05,0],[.92,.15,0],[1,1,1]));mesh('cylinder',[0,-.08,0],[0,0,0],[1.65,.12,1.65],cream,.35,group);mesh('torus',[0,.04,0],[Math.PI/2,0,0],[1.4,1.4,.32],silver,.7,group);
    for(let i=0;i<8;i++){const a=i/8*Math.PI*2;mesh('sphere',[Math.cos(a)*.92,.26,Math.sin(a)*.92],[0,a,0],[.29,.22,.3],i%3===0?red:i%3===1?[.35,.46,.18]:[.83,.65,.35],.15,group)}

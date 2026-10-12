@@ -2,7 +2,7 @@ export const fitnessSources=typeof embeddedFitness!=='undefined'?embeddedFitness
 const fitnessLabels=['Атлет в зале','Тренировка дома','Оборудование для силовой тренировки','Восстановление после тренировки'];
 export function fitnessPhoto(tile=0,extra=''){
  const width=1536,height=1024,cw=width/2,ch=height/2;
- return `<div class="fitness-photo ${extra}" data-depth-photo><svg viewBox="${tile%2*cw+3} ${Math.floor(tile/2)*ch+3} ${cw-6} ${ch-6}" preserveAspectRatio="xMidYMid slice" role="img" aria-label="${fitnessLabels[tile]}"><image href="${fitnessSources[0]}" width="${width}" height="${height}"/></svg><div class="photo-shine"></div><span class="fitness-caption">FORMA / ${['СИЛА','ДВИЖЕНИЕ','ФОКУС','ВОССТАНОВЛЕНИЕ'][tile]}</span></div>`;
+ return `<div class="fitness-photo ${extra}" data-depth-photo><svg viewBox="${tile%2*cw+3} ${Math.floor(tile/2)*ch+3} ${cw-6} ${ch-6}" preserveAspectRatio="xMidYMid slice" role="img" aria-label="${fitnessLabels[tile]}"><image href="${fitnessSources[0]}" width="${width}" height="${height}"/></svg><div class="photo-shine"></div></div>`;
 }
 export function bindVisualInteractions(){
  const reduced=matchMedia('(prefers-reduced-motion: reduce)');
