@@ -1,7 +1,21 @@
 import {muscleNames} from './training.js';
+import {fitnessSources} from './fitness.js';
+// Regions locate muscle groups on the clothed reference, not muscle boundaries.
+const atlasRegions={
+ chest:'M326 224Q361 206 405 219L405 288Q363 301 321 282Z M416 219Q462 206 500 225L507 282Q461 301 416 288Z',
+ shoulders:'M285 211Q310 185 339 199L321 262L279 277Z M487 199Q521 185 545 211L553 277L511 262Z M995 207Q1016 185 1044 199L1030 263L982 276Z M1190 199Q1218 185 1240 210L1253 277L1205 263Z',
+ biceps:'M270 286L307 299L292 354L257 348Z M520 299L557 286L571 348L536 354Z',
+ triceps:'M977 285L1019 298L1003 355L965 348Z M1213 298L1254 285L1267 348L1229 355Z',
+ core:'M346 314L484 314L495 443L332 443Z',
+ back:'M1034 223Q1117 191 1200 223L1198 341L1178 427L1055 427L1035 341Z',
+ glutes:'M1025 471L1107 477L1107 547L1024 555Z M1120 477L1205 471L1210 555L1120 547Z',
+ quads:'M323 492L400 493L393 628L370 660L318 631Z M427 493L507 492L515 631L465 660L438 628Z',
+ hamstrings:'M1024 556L1102 553L1094 650L1030 651Z M1129 553L1209 556L1205 651L1144 650Z',
+ calves:'M1020 696Q1050 676 1076 696L1070 804L1031 846Z M1150 696Q1178 676 1206 696L1193 846L1155 804Z'
+};
 export function muscleMap(groups=[],secondary=[]){
- const color=(name)=>groups.includes(name)?'var(--accent)':secondary.includes(name)?'#bd9670':'var(--track)';
- return `<svg class="muscle-map" viewBox="0 0 300 280" role="img" aria-label="Основные мышцы: ${groups.map(g=>muscleNames[g]).join(', ')}"><g fill="var(--track)" stroke="var(--line)" stroke-width="2"><circle cx="78" cy="29" r="17"/><path d="M66 48L51 58L40 94L32 154L44 159L58 109L58 164L50 227L50 261L66 261L76 186L80 186L91 261L107 261L104 227L97 163L98 109L113 159L125 154L118 94L105 58L90 48Z"/><circle cx="222" cy="29" r="17"/><path d="M210 48L195 58L184 94L176 154L188 159L202 109L202 164L194 227L194 261L210 261L220 186L224 186L235 261L251 261L248 227L241 163L242 109L257 159L269 154L262 94L249 58L234 48Z"/></g><g stroke="var(--bg)" stroke-width="2"><path d="M60 65Q78 55 76 93L61 101Z M80 64Q96 58 97 101L80 93Z" fill="${color('chest')}"/><path d="M51 62Q60 57 58 88L44 97Z M101 62Q112 64 115 97L100 88Z" fill="${color('shoulders')}"/><path d="M47 97L56 94L49 126L40 130Z M100 94L110 98L119 131L109 126Z" fill="${color('biceps')}"/><path d="M64 104L92 104L92 148L79 163L63 147Z" fill="${color('core')}"/><path d="M61 169L75 170L68 216L54 226Z M82 170L96 169L104 226L91 216Z" fill="${color('quads')}"/><path d="M205 67L220 62L222 99L204 133Z M225 62L239 67L241 133L225 99Z" fill="${color('back')}"/><path d="M195 62L203 62L201 91L187 98Z M243 62L251 64L259 98L244 92Z" fill="${color('shoulders')}"/><path d="M190 97L200 94L193 127L183 131Z M244 94L254 98L262 131L252 127Z" fill="${color('triceps')}"/><path d="M203 143L222 151L220 177L202 177Z M225 151L240 143L242 177L224 177Z" fill="${color('glutes')}"/><path d="M203 180L219 180L211 217L196 228Z M226 180L240 180L248 227L235 217Z" fill="${color('hamstrings')}"/><path d="M198 230L211 220L211 249L197 250Z M235 220L248 231L249 250L236 249Z" fill="${color('calves')}"/></g><g fill="var(--muted)" font-size="9" font-family="Arial" text-anchor="middle"><text x="78" y="278">СПЕРЕДИ</text><text x="222" y="278">СЗАДИ</text></g></svg>`;
+ const regions=Object.entries(atlasRegions).map(([key,d])=>`<path class="muscle-region ${groups.includes(key)||secondary.includes(key)?'':'inactive'}" data-muscle-region="${key}" d="${d}" fill="${groups.includes(key)?'var(--accent)':secondary.includes(key)?'#bd9670':'var(--accent)'}"/>`).join('');
+ return `<div class="muscle-atlas"><svg class="muscle-map" viewBox="190 0 1160 1024" role="img" aria-label="Расположение групп мышц спереди и сзади. Основные: ${groups.map(g=>muscleNames[g]).join(', ')}"><image href="${fitnessSources[1]}" width="1536" height="1024"/>${regions}</svg><div class="atlas-labels"><span>СПЕРЕДИ</span><span>СЗАДИ</span></div><div class="atlas-buttons" aria-label="Изучить расположение мышц">${Object.entries(muscleNames).map(([key,name])=>`<button type="button" data-inspect-muscle="${key}" aria-pressed="false">${name}</button>`).join('')}</div><p class="atlas-selection" aria-live="polite">Выбери группу, чтобы увидеть её расположение.</p></div>`;
 }
 const standing={head:[150,42],shoulder:[150,76],hip:[150,143],elbow:[173,115],wrist:[176,169],knee:[150,189],ankle:[150,235],elbow2:[132,116],wrist2:[129,169],knee2:[140,188],ankle2:[138,234]};
 const pose=(overrides)=>({...standing,...overrides});
